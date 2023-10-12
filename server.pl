@@ -31,7 +31,7 @@ use IO::Socket::INET;
 
 # 创建socket对象
 my $socket = new IO::Socket::INET (
-    LocalHost => '127.0.0.1',
+    LocalHost => '10.208.134.26',
     LocalPort => '7788',
     Proto => 'tcp',
     Listen => 5,
@@ -39,6 +39,7 @@ my $socket = new IO::Socket::INET (
 );
 
 die "无法创建socket: $!\n" unless $socket;
+$socket->autoflush(1);
 
 print "服务器启动，等待客户端连接...\n";
 
@@ -59,6 +60,7 @@ while (1) {
 
     # 发送响应给客户端
     my $response = "服务器已经收到消息: $data\n";
+    # chomp($response);
     print $client_socket $response;
 
     # 关闭客户端socket连接

@@ -27,12 +27,12 @@ use IO::Socket::INET;
 
 # 连接服务器
 my $socket = new IO::Socket::INET (
-    PeerHost => '127.0.0.1',
+    PeerHost => '10.208.134.26',
     PeerPort => '7788',
     Proto => 'tcp'
 );
 die "无法连接服务器: $!\n" unless $socket;
-
+$socket->autoflush(1);
 # 向服务器发送消息
 my $message = "Hello, Server!\n";
 # print $socket $message;
