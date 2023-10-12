@@ -54,13 +54,26 @@ while (1) {
     print "连接来自: $client_address:$client_port\n";
 
     # 从客户端接收数据
-    my $data = <$client_socket>;
-    chomp($data);
-    print "收到客户端消息: $data\n";
+    # my $data = <$client_socket>;
+    # chomp($data);
+    # print "收到客户端消息: $data\n";
 
     # 发送响应给客户端
-    my $response = "服务器已经收到消息: $data\n";
+    # my $response = "服务器已经收到消息: $data\n";
     # chomp($response);
+    # my $response="HTTP/1.1 200 OK\r\n";
+    # $response="Server:First server\r\n\r\n";
+    # $response .= "Content-type: text/plain; charset=utf-8\r\n\r\n";
+    my $response ="hello world\r\n";
+    print $client_socket <<END;
+HTTP/1.1 200 OK
+Date: Thu, 12 Oct 2023 13:15:21 GMT
+Server: fvbsuvfnsuif
+Keep-Alive: timeout=5, max=100
+Content-Type: text/plain;charset=utf-8
+
+fheusrfh8uerwf
+END
     print $client_socket $response;
 
     # 关闭客户端socket连接
