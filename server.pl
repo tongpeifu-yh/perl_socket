@@ -1,6 +1,6 @@
 #! C:\Strawberry\perl\bin\perl.exe
 
-# This is client program that connects to the local server.
+# This is server program that connects to the local server.
 use strict;
 use v5.16;
 use IO::Socket qw(:crlf :DEFAULT);
