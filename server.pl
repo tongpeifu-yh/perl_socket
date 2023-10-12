@@ -1,24 +1,69 @@
 #! C:\Strawberry\perl\bin\perl.exe
 
 # This is server program that connects to the local server.
+# use strict;
+# use v5.16;
+# use IO::Socket qw(:crlf :DEFAULT);
+
+# my $server_port = 8866;
+# my $client;
+
+# my $server = IO::Socket::INET->new(LocalPort => $server_port,
+#                                    Type      => SOCK_STREAM,
+#                                    Reuse     => 1,
+#                                    Listen    => 10) or die "Couldn't be a tcp server on port $server_port: $!\n";
+#  my $i=1;
+# while ( $client = $server->accept()) {
+
+#         print $client,", it is ok\n";
+#         $client->send("Hello, this is the ${i}th connect to the server.\n\n");
+#         $client->close();
+#         $i++;
+# }
+
+# close($server);
+
+# 服务器端代码 server.pl
+
 use strict;
-use v5.16;
-use IO::Socket qw(:crlf :DEFAULT);
+use warnings;
+use IO::Socket::INET;
 
-my $server_port = 8866;
-my $client;
+# 创建socket对象
+my $socket = new IO::Socket::INET (
+    LocalHost => '127.0.0.1',
+    LocalPort => '7788',
+    Proto => 'tcp',
+    Listen => 5,
+    Reuse => 1
+);
 
-my $server = IO::Socket::INET->new(LocalPort => $server_port,
-                                   Type      => SOCK_STREAM,
-                                   Reuse     => 1,
-                                   Listen    => 10) or die "Couldn't be a tcp server on port $server_port: $!\n";
- my $i=1;
-while ( $client = $server->accept()) {
+die "无法创建socket: $!\n" unless $socket;
 
-        print $client,", it is ok\n";
-        $client->send("Hello, this is the ${i}th connect to the server.\n\n");
-        $client->close();
-        $i++;
+print "服务器启动，等待客户端连接...\n";
+
+while (1) {
+    # 等待客户端连接
+    my $client_socket = $socket->accept();
+
+    # 获取客户端地址和端口信息
+    my $client_address = $client_socket->peerhost();
+    my $client_port = $client_socket->peerport();
+
+    print "连接来自: $client_address:$client_port\n";
+
+    # 从客户端接收数据
+    my $data = <$client_socket>;
+    chomp($data);
+    print "收到客户端消息: $data\n";
+
+    # 发送响应给客户端
+    my $response = "服务器已经收到消息: $data\n";
+    print $client_socket $response;
+
+    # 关闭客户端socket连接
+    close($client_socket);
 }
 
-close($server);
+# 关闭服务器socket连接
+$socket->close();
