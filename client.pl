@@ -34,7 +34,8 @@ my $socket = new IO::Socket::INET (
 die "无法连接服务器: $!\n" unless $socket;
 $socket->autoflush(1);
 # 向服务器发送消息
-my $message = "Hello, Server!\n";
+my $message = shift || "Hello, Server!";
+$message.="\n";
 # print $socket $message;
 $socket->send($message);
 # 从服务器接收响应
